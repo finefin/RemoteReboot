@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <script  src="http://192.168.173.133:3015/faye/client.js"></script>
+    <script  src="http://192.168.173.133:3015/faye/faye-browser.js"></script>
     <link rel="shortcut icon" type="image/png" href="favicon.png"/>
     <title>RemoteReboot</title>
 </head></head>
@@ -17,32 +17,17 @@
     <button id="reboot">REBOOT</button>
   </div>
 
-<script>
 
-  document.getElementById ('shutdown').addEventListener ('click', ()=> {
-      sendEvent ('shutdown');
-    }
-  )
+      <script>
+          const fayeClient = new Faye.Client('http://192.168.173.133:3015/faye');
 
-   document.getElementById ('reboot').addEventListener ('click', ()=> {
-      sendEvent ('reboot');
-    }
-  )
+          document.getElementById('rebootButton').addEventListener('click', () => {
+              fayeClient.publish('/commands', { action: 'reboot' });
+          });
 
-
-  function sendEvent (message) {
-        console.log("action -> ", message);
-        var data = JSON.stringify( {"action": message} );
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", 'http://192.168.173.133:3015/faye', true);
-        xhr.setRequestHeader('Content-Type', 'application/json');
-        xhr.send(data);
-  }
-
-
-
-</script>
-
-
-</body>
-</html>
+          document.getElementById('shutdownButton').addEventListener('click', () => {
+              fayeClient.publish('/commands', { action: 'shutdown' });
+          });
+      </script>
+  </body>
+  </html>
