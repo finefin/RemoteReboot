@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <script  src="http://192.168.173.133:3015/faye/client.js"></script>
+    <link rel="shortcut icon" type="image/png" href="favicon.png"/>
+    <title>RemoteReboot</title>
+</head></head>
+
+<body bgcolor="black">
+  <div align="center" >
+    <div style = "font-size:28px; color: white " ><b>HINTPAD for Windows</b><br>Simple Remote</div>
+    <br>
+    <button id="shutdown">SHUT DOWN</button>
+    <br>
+    <button id="reboot">REBOOT</button>
+  </div>
+
+<script>
+
+  document.getElementById ('shutdown').addEventListener ('click', ()=> {
+      sendEvent ('shutdown');
+    }
+  )
+
+   document.getElementById ('reboot').addEventListener ('click', ()=> {
+      sendEvent ('reboot');
+    }
+  )
+
+
+  function sendEvent (message) {
+        console.log("action -> ", message);
+        var data = JSON.stringify( {"action": message} );
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", 'http://192.168.173.133:3015/faye', true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.send(data);
+  }
+
+
+
+</script>
+
+
+</body>
+</html>

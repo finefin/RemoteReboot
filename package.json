@@ -1,0 +1,23 @@
+{
+  "name": "remotereboot",
+  "version": "1.0.0",
+  "description": "shutdown or reboot win pc",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/finefin/RemoteReboot.git"
+  },
+  "author": "GH",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/finefin/RemoteReboot/issues"
+  },
+  "homepage": "https://github.com/finefin/RemoteReboot#readme",
+  "dependencies": {
+    "faye": "^1.4.0",
+    "node-shutdown-windows": "^1.0.0"
+  }
+}
