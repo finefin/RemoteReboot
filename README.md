@@ -1,3 +1,6 @@
+This is meant to remotely shut down or reboot Hintpad-MiniPCs, but it can be generally used for that purpose.
+Make sure your ports are blocked from outside your network or use a tunnel as this approach isn't the most secure one.
+
 ## INSTALL
 
 You need to have NodeJS installed!
