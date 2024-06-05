@@ -6,7 +6,7 @@ url = require("url"),
 fs = require("fs"),
 port = 3015;
 
-const { spawn } = require("child_process");
+const { spawn, exec } = require("child_process");
 const path    = require('path');
 const mPath = path.resolve(__dirname, '..');
 
@@ -16,12 +16,18 @@ var faye_server = new faye.NodeAdapter ({mount: '/faye', timeout: 120});
 
 var http_server = http.createServer(function(req,res){
 
+
+  res.setHeader ('Access-Control-Allow-Origin', '*');
+  res.setHeader ('Access-Control-Allow-Methods', 'POST, GET');
+  res.setHeader ('Access-Control-Allow-Headers', 'Content-Type');
+
+/*
   const headers = {
-    'Access-Control-Allow-Origin': '*', /* @dev First, read about security */
+    'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'OPTIONS, POST, GET',
     'Access-Control-Max-Age': 2592000, // 30 days
   };
-
+*/
 
   // get the DATA
   let data = '';
@@ -30,11 +36,13 @@ var http_server = http.createServer(function(req,res){
     console.log(`Data chunk available: ${chunk}`)
 
     if (JSON.parse(data).action == "reboot") {
-        console.log ("REBOOT!");    
+        console.log ("REBOOT!");
+        //reboot ();
     }
 
     if (JSON.parse(data).action == "shutdown") {
-        console.log ("SHUTDOWN!");    
+        console.log ("SHUTDOWN!");  
+        //shutdown ();  
     }
 
 
@@ -116,7 +124,7 @@ function shutdown () {
   })
 }
 
-function shutdown () {
+function reboot () {
   exec ('shutdown /r /f /t 0', (error, stdout, stderr) => {
     if (error) {
       console.error ( 'Error rebooting:  $(error)' );

@@ -18,7 +18,6 @@
   </div>
 
       <script>
-          
 
           document.getElementById('reboot').addEventListener('click', () => {
               sendRoomEvent ('reboot');
@@ -28,16 +27,16 @@
             sendRoomEvent ('shutdown');
           }, this);
 
-
           function sendRoomEvent (message) {
-                console.log("Room event -> ", message);
-                const hintpadIP = "192.168.173.133";
-               var data = JSON.stringify( {"action": message} );
+                console.log("event -> ", message);
+                const host = window.location.hostname;
+                var data = JSON.stringify( {"action": message} );
                 var xhr = new XMLHttpRequest();
-                xhr.open("POST", 'http://192.168.173.133:3015', true);
+                xhr.open("POST", 'http://'+host+':3015', true);
                xhr.setRequestHeader('Content-Type', 'text/plain');
                xhr.send(data); 
           }
+
       </script>
   </body>
   </html>
