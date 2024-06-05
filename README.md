@@ -1,5 +1,4 @@
-This is meant to remotely shut down or reboot Hintpad-MiniPCs, but it can be generally used for that purpose.
-Make sure your ports are blocked from outside your network or use a tunnel as this approach isn't the most secure one.
+This is a little helper to remotely shutdown or reboot our Hintpad-MiniPCs, but it can be generally used for that purpose and is not particularly bound to the Hintpad project. Just make sure your ports are blocked from outside your network or use a tunnel, as this approach isn't the most secure one.
 
 ## INSTALL
 
