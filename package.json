@@ -17,7 +17,6 @@
   },
   "homepage": "https://github.com/finefin/RemoteReboot#readme",
   "dependencies": {
-    "faye": "^1.4.0",
-    "node-shutdown-windows": "^1.0.0"
+    "faye": "^1.4.0"
   }
 }

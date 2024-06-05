@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <script  src="http://192.168.173.133:3015/faye/faye-browser.js"></script>
     <link rel="shortcut icon" type="image/png" href="favicon.png"/>
     <title>RemoteReboot</title>
+
 </head></head>
 
 <body bgcolor="black">
@@ -17,17 +17,27 @@
     <button id="reboot">REBOOT</button>
   </div>
 
-
       <script>
-          const fayeClient = new Faye.Client('http://192.168.173.133:3015/faye');
+          
 
-          document.getElementById('rebootButton').addEventListener('click', () => {
-              fayeClient.publish('/commands', { action: 'reboot' });
-          });
+          document.getElementById('reboot').addEventListener('click', () => {
+              sendRoomEvent ('reboot');
+          }, this);
 
-          document.getElementById('shutdownButton').addEventListener('click', () => {
-              fayeClient.publish('/commands', { action: 'shutdown' });
-          });
+          document.getElementById('shutdown').addEventListener('click', () => {
+            sendRoomEvent ('shutdown');
+          }, this);
+
+
+          function sendRoomEvent (message) {
+                console.log("Room event -> ", message);
+                const hintpadIP = "192.168.173.133";
+               var data = JSON.stringify( {"action": message} );
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", 'http://192.168.173.133:3015', true);
+               xhr.setRequestHeader('Content-Type', 'text/plain');
+               xhr.send(data); 
+          }
       </script>
   </body>
   </html>

@@ -1,60 +1,59 @@
-// server.js
-const http = require('http');
-const faye = require('faye');
-const fs = require('fs');
-const path = require('path');
-const { reboot, shutdown } = require('node-shutdown-windows');
 
-// Create a basic HTTP server
-const server = http.createServer((req, res) => {
-    // Set CORS headers
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-    if (req.url === '/') {
-        fs.readFile(path.join(__dirname, 'index.html'), (err, data) => {
-            if (err) {
-                res.writeHead(500, { 'Content-Type': 'text/plain' });
-                res.end('Internal Server Error');
-            } else {
-                res.writeHead(200, { 'Content-Type': 'text/html' });
-                res.end(data);
-            }
-        });
-    } else if (req.url === '/faye-browser.js') {
-        fs.readFile(path.join(__dirname, 'node_modules', 'faye', 'browser', 'faye-browser.js'), (err, data) => {
-            if (err) {
-                res.writeHead(500, { 'Content-Type': 'text/plain' });
-                res.end('Internal Server Error');
-            } else {
-                res.writeHead(200, { 'Content-Type': 'application/javascript' });
-                res.end(data);
-            }
-        });
-    } else {
-        res.writeHead(404, { 'Content-Type': 'text/plain' });
-        res.end('Not Found');
+var http = require("http"),
+
+url = require("url"),
+fs = require("fs"),
+port = 3015;
+
+const { spawn } = require("child_process");
+const path    = require('path');
+const mPath = path.resolve(__dirname, '..');
+
+var faye = require ('faye');
+var faye_server = new faye.NodeAdapter ({mount: '/faye', timeout: 120});
+var http_server = http.createServer(function(req,res){
+
+  // get the DATA
+  let data = '';
+  req.on('data', chunk => {
+    data += chunk;
+    console.log(`Data chunk available: ${JSON.parse(data).action}`)
+
+    if (JSON.parse(data).action == "reboot") {
+        console.log ("REBOOT!");
+        
     }
+
+
+  });
+  req.on('end', () => {
+    // end of data
+  })
+
+
 });
 
-// Attach Faye to the server
-const bayeux = new faye.NodeAdapter({ mount: '/faye', timeout: 45 });
-bayeux.attach(server);
+faye_server.attach(http_server);
+http_server.listen(port,10);
+console.log("Static file server running at\n  => http://localhost:" + port + "/\nCTRL + C to shutdown");
 
-// Handle Faye messages
-bayeux.getClient().subscribe('/commands', (message) => {
-    if (message.action === 'reboot') {
-        console.log('Rebooting...');
-        reboot();
-    } else if (message.action === 'shutdown') {
-        console.log('Shutting down...');
-        shutdown();
+function shutdown () {
+  exec ('shutdown /s /f /t 0', (error, stdout, stderr) => {
+    if (error) {
+      console.error ( 'Error shutting down:  $(error)' );
+      return
     }
-});
+    console.log ( 'SHUTOWN!');
+  })
+}
 
-// Start the server
-const PORT = 8000;
-server.listen(PORT, () => {
-    console.log(`Server is running at http://localhost:${PORT}`);
-});
+function shutdown () {
+  exec ('shutdown /r /f /t 0', (error, stdout, stderr) => {
+    if (error) {
+      console.error ( 'Error rebooting:  $(error)' );
+      return
+    }
+    console.log ( 'REBOOT!');
+  })
+}
