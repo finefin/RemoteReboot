@@ -21,14 +21,6 @@ var http_server = http.createServer(function(req,res){
   res.setHeader ('Access-Control-Allow-Methods', 'POST, GET');
   res.setHeader ('Access-Control-Allow-Headers', 'Content-Type');
 
-/*
-  const headers = {
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'OPTIONS, POST, GET',
-    'Access-Control-Max-Age': 2592000, // 30 days
-  };
-*/
-
   // get the DATA
   let data = '';
   req.on('data', chunk => {
@@ -37,12 +29,12 @@ var http_server = http.createServer(function(req,res){
 
     if (JSON.parse(data).action == "reboot") {
         console.log ("REBOOT!");
-        //reboot ();
+        reboot ();
     }
 
     if (JSON.parse(data).action == "shutdown") {
         console.log ("SHUTDOWN!");  
-        //shutdown ();  
+        shutdown ();  
     }
 
 
